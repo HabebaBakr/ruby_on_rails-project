@@ -1,4 +1,6 @@
 class AdminsController < ApplicationController
+  before_filter :set_admin , only: [:show, :edit, :destroy]
+  
   def index
     @admins = Admin.all
   end
@@ -19,6 +21,12 @@ class AdminsController < ApplicationController
   end
 
   def destroy
+    @admin.destroy!
+    head :no_content
+    
+  rescue ActiveRecord::RecordNotDestroyed
+    render json{}, status: :unprocessable_entity
+
   end
 
   private
